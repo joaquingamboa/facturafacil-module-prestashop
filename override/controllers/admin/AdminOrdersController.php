@@ -80,8 +80,9 @@ class AdminOrdersController extends AdminOrdersControllerCore{
         array_push($referencias_array, $referencia);        
  
         $documento_tributario->ObservacionPDF = "ORDEN DE REFERENCIA " . $order->reference;
-        $documento_tributario->RutRecep = "18161794-2"; 
-        $documento_tributario->RznSocRecep = $customer->firstname . " " . $customer->lastname;
+        $documento_tributario->RutRecep = "66666666-6"; 
+        $documento_tributario->RznSocRecep = "CLIENTE DE OCASIÓN";
+        //$customer->firstname . " " . $customer->lastname;
         $documento_tributario->CmnaRecep = "NO INFORMADO";
         $documento_tributario->CiudadRecep = "NO INFORMADO";
         $documento_tributario->DirRecep = "NO INFORMADO";
