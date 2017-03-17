@@ -38,9 +38,33 @@ class dte_module extends ObjectModel
             'folio' => array('type' => self::TYPE_STRING, 'validate' => 'isGenericName'),
             'tipo_dte' => array('type' => self::TYPE_STRING, 'validate' => 'isGenericName'),
             'errors' => array('type' => self::TYPE_STRING, 'validate' => 'isGenericName'),
-            'pdf' => array('type' => self::TYPE_STRING, 'validate' => 'isGenericName'),
+            'pdf' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
         ),
     );
+
+    public static function loadByIdOrder($id_order){
+        $result = Db::getInstance()->getRow('
+            SELECT *
+            FROM `'._DB_PREFIX_.'dte_module` dte
+            WHERE dte.`id_order` = '.(int)$id_order
+        );
+
+        return new dte_module($result['id_dte']);
+    }
+
+    public function TipoDTEString(){
+        if($this->tipo_dte == 33){
+            return "FACTURA ELECTRONICA";
+        }
+
+        if($this->tipo_dte == 34){
+            return "FACTURA EXENTA ELECTRONICA";
+        }
+
+        if($this->tipo_dte == 39){
+            return "BOLETA ELECTRONICA";
+        }
+    }
 	
 }
 

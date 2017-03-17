@@ -120,21 +120,53 @@
 						</div>
 					</div>
 				</div>
-				<!-- Orders Actions -->
+				<!-- DTE INFORMATION -->
 				<div class="well hidden-print">
+					{if $dte_module->folio }
+					<div class="row" style="padding-bottom: 15px">
+						<div class="col-lg-12">
+						<span style="float:left;">{l s=$dte_module->TipoDTEString()}	#{l s=$dte_module->folio}</span>
+						</div>
+					</div>
+					<div class="row">
+						<!-- DTE form -->
+						<form action="{$currentIndex}&amp;vieworder&amp;token={$smarty.get.token}" method="post" style="float:left;">
+							<div class="row">
+								<div class="col-lg-12">
+									<input type="hidden" name="id_order" value="{$order->id}" />
+									<button type="submit" name="VIEW_DTE" class="btn btn-default">
+										<i class="icon-file"></i> {l s='PDF'}
+									</button>
+								</div>
+							</div>
+						</form>
+						&nbsp;
+						&nbsp;
+					</div>
+					{else}
+					<div class="row" style="padding-bottom: 15px">
 					<!-- DTE form -->
 					<form action="{$currentIndex}&amp;vieworder&amp;token={$smarty.get.token}" method="post" style="float:left;">
 						<div class="row" style="padding-bottom: 15px">
 							<div class="col-lg-12">
 								<input type="hidden" name="id_order" value="{$order->id}" />
 								<button type="submit" name="submitDTE" class="btn btn-default">
-									<i class="icon-file-text"></i> {l s='DTE'}
+									<i class="icon-file-text"></i> {l s='GENERAR DTE'}
 								</button>
 							</div>
 						</div>
 					</form>
-					&nbsp;
-					&nbsp;
+						<div class="col-lg-12">
+						<span class="span label label-inactive">
+							<i class="icon-remove"></i>
+							{l s='DTE NO GENERADO'}
+						</span>
+						</div>
+					</div>
+					{/if}
+				</div>
+				<!-- Orders Actions -->
+				<div class="well hidden-print">
 					<a class="btn btn-default" href="javascript:window.print()">
 						<i class="icon-print"></i>
 						{l s='Print order'}

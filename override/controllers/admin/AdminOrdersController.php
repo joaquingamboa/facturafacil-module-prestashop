@@ -22,6 +22,21 @@ class AdminOrdersController extends AdminOrdersControllerCore{
                 Tools::redirectAdmin(self::$currentIndex.'&id_order='.$order->id.'&vieworder&conf=10&token='.$this->token);
         }
 
+        if (Tools::isSubmit('VIEW_DTE') && Tools::getValue('id_order') > 0) {
+                require_once(_PS_MODULE_DIR_. '/dte/classes/dte_module.php');
+                $dte_module = dte_module::loadByIdOrder(Tools::getValue('id_order'));
+                $fichero = "DTE_" . $dte_module->tipo_dte . "_FOLIO_" . $dte_module->folio . ".pdf";
+                $file = base64_decode($dte_module->pdf); 
+                header('Content-Description: File Transfer');
+                header('Content-Type: application/octet-stream');
+                header('Content-Disposition: attachment; filename="' . $fichero . '"');
+                header('Expires: 0');
+                header('Cache-Control: must-revalidate');
+                header('Pragma: public');
+                echo $file;
+                exit();
+        }
+
     }
 
     public static function _getFormatedAddress(Address $the_address, $line_sep, $fields_style = array())
@@ -69,15 +84,7 @@ class AdminOrdersController extends AdminOrdersControllerCore{
             // Check if is not a virutal product for the displaying of shipping
             if (!$product['is_virtual'])
                 $virtual_product &= false;
-        }
-
-        $referencia = new stdClass();
-        $referencia->NroLinRef = 1;
-        $referencia->TpoDocRef = "NVP";
-        $referencia->FolioRef = $id_order;
-        $referencia->FchRef = date('Y-m-d');
-        $referencia->RazonRef = "NOTA DE PRESTASHOP " . $id_order;
-        array_push($referencias_array, $referencia);        
+        }      
  
         $documento_tributario->ObservacionPDF = "ORDEN DE REFERENCIA " . $order->reference;
         $documento_tributario->RutRecep = "66666666-6"; 
@@ -96,9 +103,6 @@ class AdminOrdersController extends AdminOrdersControllerCore{
           'DocumentosTributarios'=>  json_decode(json_encode($documento_tributario)),
           'DetalleDocumentostributarios' => json_decode(json_encode($detalles_array)),
         );
-
-
-        if(isset($referencias_array)){ $json['ReferenciasDt'] = json_decode(json_encode($referencias_array)); }
 
         $datos = http_build_query($json);
         $signature = hash_hmac("SHA256", $datos, Configuration::get("API_KEY"));
@@ -143,14 +147,14 @@ class AdminOrdersController extends AdminOrdersControllerCore{
 
     public function renderView()
     {
-
         parent::renderView();
 
+        require_once(_PS_MODULE_DIR_. '/dte/classes/dte_module.php');
+        $dte_module = dte_module::loadByIdOrder(Tools::getValue('id_order'));
         $tpl_file = _PS_MODULE_DIR_.'/dte/views/template/admin/orders/view.tpl';
-
         $tpl = $this->context->smarty->createTemplate($tpl_file, $this->context->smarty);
-
         $tpl->assign($this->tpl_view_vars);
+        $tpl->assign(array('dte_module' => $dte_module));
 
         return $tpl->fetch();
     }    
