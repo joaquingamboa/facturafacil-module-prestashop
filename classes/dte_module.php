@@ -32,24 +32,15 @@ class dte_module extends ObjectModel
         'primary' => 'id_dte',
         'multilang' => FALSE,
         'fields' => array(
-            'id_dte' => array('type' => self::TYPE_INT, 'validate' => 'isInt', 'required' => TRUE),
+            'id_dte' => array('type' => self::TYPE_INT, 'validate' => 'isInt', 'required' => FALSE),
             'id_order' => array('type' => self::TYPE_INT, 'validate' => 'isInt', 'required' => TRUE),
             'id_facturafacil' => array('type' => self::TYPE_INT, 'validate' => 'isInt'),
-            'folio' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-            'tipo_dte' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-            'errors' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
-            'pdf' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
+            'folio' => array('type' => self::TYPE_STRING, 'validate' => 'isGenericName'),
+            'tipo_dte' => array('type' => self::TYPE_STRING, 'validate' => 'isGenericName'),
+            'errors' => array('type' => self::TYPE_STRING, 'validate' => 'isGenericName'),
+            'pdf' => array('type' => self::TYPE_STRING, 'validate' => 'isGenericName'),
         ),
     );
 	
-    public static function loadByIdProduct($id_parameter){
-        $result = Db::getInstance()->getRow('
-            SELECT *
-            FROM `'._DB_PREFIX_.'dte_parameters` parameter
-            WHERE parameter.`id_parameter` = '.(int)$id_parameter
-        );
-        
-        return new dte_parameters($result['id_parameter']);
-    }
 }
 

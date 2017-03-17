@@ -52,7 +52,7 @@ class dte extends Module {
                   `folio` INT( 11 ) UNSIGNED NULL,
                   `tipo_dte` VARCHAR( 3 ) NULL,
                   `errors` TEXT NULL,
-                  `pdf` TEXT NULL,
+                  `pdf` MEDIUMTEXT NULL,
                   PRIMARY KEY (`id_dte`)
                 ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
                                 

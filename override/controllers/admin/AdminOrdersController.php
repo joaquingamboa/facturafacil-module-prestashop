@@ -73,10 +73,10 @@ class AdminOrdersController extends AdminOrdersControllerCore{
 
         $referencia = new stdClass();
         $referencia->NroLinRef = 1;
-        $referencia->TpoDocRef = "PNV";
+        $referencia->TpoDocRef = "NVP";
         $referencia->FolioRef = $id_order;
-        $referencia->FchRef = date('y-m-d');
-        $referencia->RazonRef = "NOTA DE PRESTASHOP";
+        $referencia->FchRef = date('Y-m-d');
+        $referencia->RazonRef = "NOTA DE PRESTASHOP " . $id_order;
         array_push($referencias_array, $referencia);        
  
         $documento_tributario->ObservacionPDF = "ORDEN DE REFERENCIA " . $order->reference;
@@ -98,7 +98,7 @@ class AdminOrdersController extends AdminOrdersControllerCore{
         );
 
 
-        if(isset($referencias_array)){ $json['ReferenciasDt'] = json_decode(json_encode($referencias_array)); } 
+        if(isset($referencias_array)){ $json['ReferenciasDt'] = json_decode(json_encode($referencias_array)); }
 
         $datos = http_build_query($json);
         $signature = hash_hmac("SHA256", $datos, Configuration::get("API_KEY"));
@@ -120,10 +120,24 @@ class AdminOrdersController extends AdminOrdersControllerCore{
         curl_setopt($session, CURLOPT_HTTPHEADER, $headers);
         $response = curl_exec($session);        
         curl_close($session);
-        $documento_rest = json_decode($response);  
+        $documento_rest = json_decode($response); 
 
         if(isset($documento_rest->errors) && $documento_rest->errors != ""){
             var_dump($documento_rest->errors);
+            exit();
+        }
+
+
+        if(isset($documento_rest->Folio)){
+            require_once(_PS_MODULE_DIR_. '/dte/classes/dte_module.php');
+            $dte_module = new dte_module();
+            $dte_module->id_order = $id_order;
+            $dte_module->id_facturafacil = $documento_rest->id;
+            $dte_module->folio = $documento_rest->Folio;
+            $dte_module->tipo_dte = $documento_tributario->TipoDTE;
+            $dte_module->errors = $documento_rest->errors;   
+            $dte_module->pdf = $documento_rest->PDF;   
+            $dte_module->add();
         }
     }
 
