@@ -14,6 +14,9 @@ class AdminOrdersController extends AdminOrdersControllerCore{
         parent::postProcess();
         
         if (Tools::isSubmit('submitDTE') && Tools::getValue('id_order') > 0) {
+            echo Tools::getValue('FF_tipo_dte') . "<br/>";
+            echo Tools::getValue('FF_rut');
+            exit();
                 $order = new Order(Tools::getValue('id_order'));
                 $customer = new Customer($order->id_customer);
                 $order_status = new OrderState((int)$order->current_state, (int)$order->id_lang);
@@ -58,12 +61,18 @@ class AdminOrdersController extends AdminOrdersControllerCore{
         $products_list = '';
         $virtual_product = false;
 
+        $tipo_dte = Tools::getValue('FF_tipo_dte');
+        $rut = Tools::getValue('FF_rut');
+        $comuna = Tools::getValue('FF_comuna');
+        $giro = Tools::getValue('FF_giro');
+        $direccion = Tools::getValue('FF_direccion');
+        $razon_social = Tools::getValue('FF_razon_social');
+
         $documento_tributario = new stdClass();
         $documento_tributario->TipoDTE = 39;
         $documento_tributario->RUTEmisor = Configuration::get("RUT_EMISOR");
         $documento_tributario->TasaIVA = 19;
         $detalles_array = Array();
-        $referencias_array = array();
         $cant_cart_item = 1;
 
         foreach ($order->getCartProducts() as $product) {
@@ -87,13 +96,13 @@ class AdminOrdersController extends AdminOrdersControllerCore{
         }      
  
         $documento_tributario->ObservacionPDF = "ORDEN DE REFERENCIA " . $order->reference;
-        $documento_tributario->RutRecep = "66666666-6"; 
-        $documento_tributario->RznSocRecep = "CLIENTE DE OCASIÓN";
+        $documento_tributario->RutRecep = $tipo_dte == 39  ? '66666666-6' : $rut; 
+        $documento_tributario->RznSocRecep = $tipo_dte == 39  ? "CLIENTE DE OCASIÓN" : $razon_social;
         //$customer->firstname . " " . $customer->lastname;
-        $documento_tributario->CmnaRecep = "NO INFORMADO";
-        $documento_tributario->CiudadRecep = "NO INFORMADO";
-        $documento_tributario->DirRecep = "NO INFORMADO";
-        $documento_tributario->GiroRecep = "NO INFORMADO";
+        $documento_tributario->CmnaRecep = $tipo_dte == 39  ? "NO INFORMADO" : $comuna;
+        $documento_tributario->CiudadRecep = $tipo_dte == 39  ? "NO INFORMADO" : "";
+        $documento_tributario->DirRecep = $tipo_dte == 39  ? "NO INFORMADO" : $direccion;
+        $documento_tributario->GiroRecep = $tipo_dte == 39  ? "NO INFORMADO" : $giro;
         $documento_tributario->IVA = round(($order->total_products_wt - $order->total_products) + ($order->total_shipping_tax_incl - $order->total_shipping_tax_excl));
         $documento_tributario->MntNeto = round($order->total_products);
         $documento_tributario->MntTotal = round($order->total_paid);
@@ -140,7 +149,12 @@ class AdminOrdersController extends AdminOrdersControllerCore{
             $dte_module->folio = $documento_rest->Folio;
             $dte_module->tipo_dte = $documento_tributario->TipoDTE;
             $dte_module->errors = $documento_rest->errors;   
-            $dte_module->pdf = $documento_rest->PDF;   
+            $dte_module->pdf = $documento_rest->PDF;  
+            $dte_module->rut = $tipo_dte == 39  ? '66666666-6' : $rut;
+            $dte_module->razon_social = $tipo_dte == 39  ? "CLIENTE DE OCASIÓN" : $razon_social;
+            $dte_module->direccion = $tipo_dte == 39  ? "NO INFORMADO" : $direccion;
+            $dte_module->comuna = $tipo_dte == 39  ? "NO INFORMADO" : $comuna;
+            $dte_module->giro = $tipo_dte == 39  ? "NO INFORMADO" : $giro; 
             $dte_module->add();
         }
     }

@@ -133,6 +133,39 @@
 						<form action="{$currentIndex}&amp;vieworder&amp;token={$smarty.get.token}" method="post" style="float:left;">
 							<div class="row">
 								<div class="col-lg-12">
+									<div class="col-lg-4" style="padding-bottom:15px;">
+										RUT
+									</div>
+									<div class="col-lg-8" style="padding-bottom:15px;">
+										<span>{l s=$dte_module->rut}</span>
+									</div>
+									<div class="col-lg-4" style="padding-bottom:15px;">
+										RAZON SOCIAL
+									</div>
+									<div class="col-lg-8" style="padding-bottom:15px;">
+										<span>{l s=$dte_module->razon_social}</span>
+									</div>
+									<div class="col-lg-4" style="padding-bottom:15px;">
+										DIRECCION
+									</div>
+									<div class="col-lg-8" style="padding-bottom:15px;">
+										<span>{l s=$dte_module->direccion}</span>
+									</div>
+									<div class="col-lg-4" style="padding-bottom:15px;">
+										GIRO
+									</div>
+									<div class="col-lg-8" style="padding-bottom:15px;">
+										<span>{l s=$dte_module->giro}</span>
+									</div>																
+									<div class="col-lg-4" style="padding-bottom:15px;">
+										COMUNA
+									</div>
+									<div class="col-lg-8" style="padding-bottom:15px;">
+										<span>{l s=$dte_module->comuna}</span>
+									</div>
+								</div>
+								
+								<div class="col-lg-12">
 									<input type="hidden" name="id_order" value="{$order->id}" />
 									<button type="submit" name="VIEW_DTE" class="btn btn-default">
 										<i class="icon-file"></i> {l s='PDF'}
@@ -149,10 +182,49 @@
 					<form action="{$currentIndex}&amp;vieworder&amp;token={$smarty.get.token}" method="post" style="float:left;">
 						<div class="row" style="padding-bottom: 15px">
 							<div class="col-lg-12">
+								<div class="col-lg-12" style="padding-bottom: 15px">
 								<input type="hidden" name="id_order" value="{$order->id}" />
-								<button type="submit" name="submitDTE" class="btn btn-default">
+									<select id="FF_tipo_dte" class="chosen form-control" name="FF_tipo_dte">
+									{foreach $dte_module->TipoDTE() as $item => $key}
+										<option value="{$item}">{$key}</option>
+									{/foreach}
+									</select>
+								</div>
+								<div class="col-lg-4" style="padding-bottom:15px;">
+									RUT
+								</div>
+								<div class="col-lg-8" style="padding-bottom:15px;">
+									<input type="text" id="FF_rut" name="FF_rut" class="chosen form-control" required="required" maxlength="10">
+								</div>
+								<div class="col-lg-4" style="padding-bottom:15px;">
+									RAZON SOCIAL
+								</div>
+								<div class="col-lg-8" style="padding-bottom:15px;">
+									<input type="text" id="FF_razon_social" name="FF_razon_social" class="chosen form-control" required="required" maxlength="100">
+								</div>
+								<div class="col-lg-4" style="padding-bottom:15px;">
+									DIRECCION
+								</div>
+								<div class="col-lg-8" style="padding-bottom:15px;">
+									<input type="text" id="FF_direccion" name="FF_direccion" class="chosen form-control" required="required" maxlength="70">
+								</div>
+								<div class="col-lg-4" style="padding-bottom:15px;">
+									GIRO
+								</div>
+								<div class="col-lg-8" style="padding-bottom:15px;">
+									<input type="text" id="FF_giro" name="FF_giro" class="chosen form-control" required="required" maxlength="40">
+								</div>																
+								<div class="col-lg-4" style="padding-bottom:15px;">
+									COMUNA
+								</div>
+								<div class="col-lg-8" style="padding-bottom:15px;">
+									<input type="text" id="FF_comuna" name="FF_comuna" class="chosen form-control" required="required" maxlength="20">
+								</div>									
+								<div class="col-lg-12">
+									<button type="submit" name="submitDTE" class="btn btn-default">
 									<i class="icon-file-text"></i> {l s='GENERAR DTE'}
 								</button>
+								</div>
 							</div>
 						</div>
 					</form>

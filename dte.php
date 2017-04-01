@@ -53,6 +53,11 @@ class dte extends Module {
                   `tipo_dte` VARCHAR( 3 ) NULL,
                   `errors` TEXT NULL,
                   `pdf` MEDIUMTEXT NULL,
+                  `rut` VARCHAR ( 11 ) NULL,
+                  `razon_social` VARCHAR ( 100 ) NULL,
+                  `direccion` VARCHAR ( 70 ) NULL,
+                  `giro` VARCHAR ( 40 )  NULL,
+                  `comuna` VARCHAR ( 20 )  NULL,
                   PRIMARY KEY (`id_dte`)
                 ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8';
                                 

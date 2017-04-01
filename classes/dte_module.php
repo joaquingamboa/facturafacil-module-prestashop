@@ -22,7 +22,22 @@ class dte_module extends ObjectModel
     public $errors;   
 
     /** @var string */
-    public $pdf;          
+    public $pdf;    
+
+    /** @var string */
+    public $rut;   
+
+    /** @var string */
+    public $razon_social;   
+
+    /** @var string */
+    public $direccion;   
+
+    /** @var string */
+    public $giro;  
+
+    /** @var string */
+    public $comuna;      
 	
     /**
      * @see ObjectModel::$definition
@@ -39,6 +54,11 @@ class dte_module extends ObjectModel
             'tipo_dte' => array('type' => self::TYPE_STRING, 'validate' => 'isGenericName'),
             'errors' => array('type' => self::TYPE_STRING, 'validate' => 'isGenericName'),
             'pdf' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
+            'rut' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
+            'razon_social' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
+            'direccion' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
+            'giro' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
+            'comuna' => array('type' => self::TYPE_STRING, 'validate' => 'isString'),
         ),
     );
 
@@ -64,6 +84,14 @@ class dte_module extends ObjectModel
         if($this->tipo_dte == 39){
             return "BOLETA ELECTRONICA";
         }
+    }
+
+    public function TipoDTE(){
+        $tipo = array(
+         33 => 'FACTURA ELECTRONICA',
+         34 => 'FACTURA NO AFECTA O EXENTA ELECTRONICA',
+         39 => 'BOLETA ELECTRÓNICA');
+        return $tipo;
     }
 	
 }
