@@ -14,9 +14,6 @@ class AdminOrdersController extends AdminOrdersControllerCore{
         parent::postProcess();
         
         if (Tools::isSubmit('submitDTE') && Tools::getValue('id_order') > 0) {
-            echo Tools::getValue('FF_tipo_dte') . "<br/>";
-            echo Tools::getValue('FF_rut');
-            exit();
                 $order = new Order(Tools::getValue('id_order'));
                 $customer = new Customer($order->id_customer);
                 $order_status = new OrderState((int)$order->current_state, (int)$order->id_lang);
